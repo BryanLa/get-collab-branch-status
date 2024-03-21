@@ -24,13 +24,11 @@ These are all typically one-time steps, with the exception of #4 when doing revi
 
 3. Download the `get-collab-branch-status.sh` Git Bash script from this repo, to the parent directory of your local repo clone subdirectories. For example, if the clone you downloaded in step #1 is in `c:\git\my-clone-repo`, the root directory where the Git Bash script should be downloaded is `c:\git`. 
 4. Update the Bash variables at the top of the script file, including:
-   - ORG: Set to the GitHub org of the repo
-   - REPO: Set to the GitHub repo, in the org specified above
-   - COLLAB_BRANCH: Set to the collab branch, in the repo specified above
-   - PR: Set to the pull request number used to compare/merge the collab HEAD branch into the BASE branch. The BASE branch is ideally a release branch, but can also be `main`.
-   - CSV_FILE_OUTPUT: If you'd like the script to log the file name and commit message output to a .csv file for analysis, set the value to `1`. Files are created in the same directory where you stored the script (in step #3), under the format: *"DDD, MMM DD,YYYY TIME.csv"*   
-   - 
-   `CSV_FILE_OUTPUT=1`  
+   - `ORG`: Set to the GitHub org of the repo
+   - `REPO`: Set to the GitHub repo, in the org specified above
+   - `COLLAB_BRANCH`: Set to the collab branch, in the repo specified above
+   - `PR`: Set to the pull request number used to compare/merge the collab HEAD branch into the BASE branch. The BASE branch is ideally a release branch, but can also be `main`.
+   - `CSV_FILE_OUTPUT`: If you'd like the script to log the file name and commit message output to a .csv file for analysis, set the value to `1`. Files are created in the same directory where you stored the script (in step #3), under the format: *"DDD, MMM DD,YYYY TIME.csv"*   
 
 ## Usage
 
