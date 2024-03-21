@@ -1,6 +1,9 @@
 # get-collab-branch-status
 
-Tool and process for getting review status info for a collab branch, in a specific repository. The tool:
+This repo contains a tool and process for getting the review status info for all files in a collab branch, in a specific repository. This is a process that can be used by PR reviewers to isolate a set of files for review, within a collab branch, allowing the review process to occur on a more granular level.
+
+The tool does the following:
+
 1. Sets and verifies the following Bash variables have been set correctly:
    1. The GitHub organization that contains the repository
    2. The GitHub repository
