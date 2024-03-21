@@ -1,37 +1,36 @@
 # get-collab-branch-status
 
-This repo contains a tool and process for getting the review status info for all files in a collab branch, in a specific repository. This is a process that can be used by PR reviewers to isolate a set of files for review, within a collab branch, allowing the review process to occur on a more granular level.
+This repo contains a tool and process for getting the review status info for all modified files in a collab branch, in a specific repository. This is a process that can be used by PR reviewers to isolate a set of files for review, within a collab branch, allowing the review process to occur on a more granular level.
 
 The tool does the following:
 
-1. Sets and verifies the following Bash variables have been set correctly:
-   1. The GitHub organization that contains the repository
-   2. The GitHub repository
-   3. The collab branch within the repository
-   4. The pull request number for the open PR that compares the collab HEAD branch with the destination BASE branch. The BASE branch is ideally a release branch, but can also be `main`
-   5. The name of the remote for the given repository (ie: upstream, origin, etc.)
-   6. A flag that indicates whether the script should send output to a .csv file
+1. Sets (and prompts for verification) that all Bash variables have been set correctly.
 2. Checks out a fresh copy of the collab branch from the GitHub repo. If it doesn't exist locally yet it will create a copy of it.
-3. Gets a list of the files in the open PR
+3. Gets a list of the files in the open PR.
 4. Walks the list of files and pulls the latest commit message for each file from the collab branch. The filename and commit message are output to the console by default, and can also be directed to a .csv file for analysis.
 
 ## Setup
 
+These are all typically one-time steps, with the exception of #4 when doing reviews across multiple repos and/or collab branches.
+
 1. Make sure you have a local clone of the repository that you'll be working with.
 2. Verify that the following tools are installed:
-   1. Git Bash
-      1. See https://git-scm.com/downloads for the appropriate download and install.
-   2. JQ JSON processor
-      1. Open a Git Bash console under admin privileges
-      2. Copy, paste, and run the following statement in Git Bash:  
+   - Git Bash
+      - See https://git-scm.com/downloads for the appropriate download and install.
+   - JQ JSON processor
+      - Open a Git Bash console under admin privileges
+      - Copy, paste, and run the following statement in Git Bash:  
          `curl -L -o /usr/bin/jq.exe https://github.com/stedolan/jq/releases/latest/download/jq-win64.exe`
 
 3. Download the `get-collab-branch-status.sh` Git Bash script from this repo, to the parent directory of your local repo clone subdirectories. For example, if the clone you downloaded in step #1 is in `c:\git\my-clone-repo`, the root directory where the Git Bash script should be downloaded is `c:\git`. 
-4. If you'd like the script to generate a .csv file for analysis, update the following variable assignment at the top of the script, setting the value to `1`. Save the script file after the update:  
+4. Update the Bash variables at the top of the script file, including:
+   - ORG: Set to the GitHub org of the repo
+   - REPO: Set to the GitHub repo, in the org specified above
+   - COLLAB_BRANCH: Set to the collab branch, in the repo specified above
+   - PR: Set to the pull request number used to compare/merge the collab HEAD branch into the BASE branch. The BASE branch is ideally a release branch, but can also be `main`.
+   - CSV_FILE_OUTPUT: If you'd like the script to log the file name and commit message output to a .csv file for analysis, set the value to `1`. Files are created in the same directory where you stored the script (in step #3), under the format: *"DDD, MMM DD,YYYY TIME.csv"*   
+   - 
    `CSV_FILE_OUTPUT=1`  
-
-   Files will be created in the same directory where you stored the script (in step #3), under the format: *"DDD, MMM DD,YYYY TIME.csv"* 
-
 
 ## Usage
 
