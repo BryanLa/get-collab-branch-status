@@ -63,7 +63,7 @@ fi
 # Iterate over the files, print file name and latest commit message
 echo
 echo "Listing all file names and their latest commits ..."
-if [ $CSV_FILE_OUTPUT == 1 ]; then echo "Filename,Commit message,Author,State" > ..\\"$TIMESTAMP.csv"; fi
+if [ $CSV_FILE_OUTPUT == 1 ]; then echo "Filename,Last commit message,Author,State" > ..\\"$TIMESTAMP.csv"; fi
 
 for filename in $files; do
   message=$(git log -1 --pretty=format:"%s, %an," --name-status -- "$filename" | awk '{if(NR==1) print $0; else if(NR==2) print $1;}' | tr '\n' ' ')
