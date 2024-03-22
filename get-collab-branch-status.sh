@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# NOTE: The script uses the `gh api` command, which requires GitHub authentication. You can either run `gh auth login` and follow 
+# the prompts to authenticate with your GitHub account. Or create a Personal Access Token (see
+# https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and assign 
+# it to the GITHUB_TOKEN environment variable. It's not recommended to keep the GITHUB_TOKEN variable assignment in the script 
+# for security reason.
+
 # Variables
 ORG="MicrosoftDocs"                 # Change to $1 to populate via command line parameters
 REPO="cloud-adoption-framework-pr"  # Change to $2 to populate via command line parameters
@@ -32,9 +38,6 @@ read -p ""
 echo
 echo "Getting a fresh local copy of collab branch: $COLLAB_BRANCH ..."
 cd $REPO
-# git fetch $COLLAB_BRANCH_REMOTE 
-# git checkout --track $COLLAB_BRANCH_REMOTE/$COLLAB_BRANCH
-# git pull $COLLAB_BRANCH_REMOTE $COLLAB_BRANCH
 
 if [[ $(git ls-remote --heads $COLLAB_BRANCH_REMOTE refs/heads/"$COLLAB_BRANCH") == "" ]]; then 
     echo $'Branch "'$COLLAB_BRANCH'" does not exist in the "'$COLLAB_BRANCH_REMOTE'" remote. Correct the issue and rerun. Exiting the script.'
@@ -54,7 +57,7 @@ fi
 # Get list of files in the pull request
 echo
 echo "Getting a list of files in PR: $PR ..."
-files=$(gh pr view $PR --json files --jq '.files[].path' -R $ORG/$REPO)
+files=$(gh api repos/$org/$repo/pulls/$PR/files --jq '.[].filename' --paginate)
 if [ -z "$files" ]; then
     echo "Invalid PR or no files found in the pull request."
     exit 1
@@ -66,7 +69,7 @@ echo "Listing all file names and their latest commits ..."
 if [ $CSV_FILE_OUTPUT == 1 ]; then echo "Filename,Last commit message,Author,State" > ..\\"$TIMESTAMP.csv"; fi
 
 for filename in $files; do
-  message=$(git log -1 --pretty=format:"%s, %an," --name-status -- "$filename" | awk '{if(NR==1) print $0; else if(NR==2) print $1;}' | tr '\n' ' ')
+  message=$(git log -1 --pretty=format:"\"%s\", %an," --name-status -- "$filename" | awk '{if(NR==1) print $0; else if(NR==2) print $1;}' | tr '\n' ' ')
   echo "File: $filename"
   echo "Commit message: $message"
   if [ $CSV_FILE_OUTPUT == 1 ]; then echo "$filename,$message" >> ..\\"$TIMESTAMP.csv"; fi

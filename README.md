@@ -36,6 +36,8 @@ On the machine where the script is run, complete the following steps:
 
 1. Open a Git Bash console and CD into the parent directory of your repo where the script lives, ie: `c:\git`.  
 
+2. The script uses the `gh api` command, which requires GitHub authentication. You can either run `gh auth login` and follow the prompts to authenticate with your GitHub account. Or create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and assign it to the GITHUB_TOKEN environment variable. It's not recommended to keep the GITHUB_TOKEN variable assignment in the script for security reason.
+
 2. Run the script using: `./get-collab-branch-status.sh`. The script will output the PR filenames and commit info to the console, and optionally to the .csv file.  
 
 3. Using the script output, identify the files to be reviewed:  
