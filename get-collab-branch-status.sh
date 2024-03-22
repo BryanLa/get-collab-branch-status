@@ -8,7 +8,7 @@ PR="5286"                           # Change to $4 to populate via command line 
 COLLAB_BRANCH_REMOTE="upstream"     # Typically left as "upstream"
 TIMESTAMP=$(date)
 CSV_FILE_OUTPUT=1                   # 0=no, 1=yes
-DEBUG=1                             # 0=no, 1=yes
+DEBUG=0                             # 0=no, 1=yes
 
 # Usage
 if [ -z "$ORG" ] || [ -z "$REPO" ] || [ -z "$COLLAB_BRANCH" ] || [ -z "$PR" ]; then
