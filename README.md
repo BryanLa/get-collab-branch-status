@@ -20,11 +20,14 @@ These are typically one-time steps, with the exception of #4 if doing reviews ac
    - Git Bash: See https://git-scm.com/downloads for the appropriate download and install.
    - JQ JSON processor:
       - Open a Git Bash console under admin privilege
-      - Copy, paste, and run the following statement in Git Bash:  
+      - Copy, paste, and run the following statement in Git Bash:
          `curl -L -o /usr/bin/jq.exe https://github.com/stedolan/jq/releases/latest/download/jq-win64.exe`
 
+        > NOTE: this uses curl, which is preinstalled on Win10 and Win11. See [this post](https://stackoverflow.com/a/16216825) if you need to install.
+
+
 3. Download the `get-collab-branch-status.sh` Git Bash script from this repo, to the parent directory of your local repo clone subdirectory. For example, if the clone created in step #1 is in `c:\git\my-clone-repo`, the root directory where the Git Bash script should be downloaded is `c:\git`.  
-4. Update the Bash variables at the top of the script file accordingly:
+4. Open the script file in an editor and update the Bash variables at the top of the file accordingly:
    - `ORG`: Set to the GitHub org of the repo where you're doing reviews
    - `REPO`: Set to the repo where you're doing reviews, in the org specified above
    - `COLLAB_BRANCH`: Set to the collab branch where you're doing reviews, in the repo specified above

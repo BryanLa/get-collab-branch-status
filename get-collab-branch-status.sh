@@ -3,8 +3,8 @@
 # Variables
 ORG="MicrosoftDocs"                 # Change to $1 to populate via command line parameters
 REPO="cloud-adoption-framework-pr"  # Change to $2 to populate via command line parameters
-COLLAB_BRANCH="collab-bryanla-test" # Change to $3 to populate via command line parameters
-PR="5272"                           # Change to $4 to populate via command line parameters; NOTE THIS IS THE COLLAB-TO-RELEASE PR
+COLLAB_BRANCH="collab-govern"       # Change to $3 to populate via command line parameters
+PR="5286"                           # Change to $4 to populate via command line parameters; NOTE THIS IS THE COLLAB-TO-RELEASE PR
 COLLAB_BRANCH_REMOTE="upstream"     # Typically left as "upstream"
 TIMESTAMP=$(date)
 CSV_FILE_OUTPUT=1                   # 0=no, 1=yes
@@ -63,13 +63,13 @@ fi
 # Iterate over the files, print file name and latest commit message
 echo
 echo "Listing all file names and their latest commits ..."
-if [ $CSV_FILE_OUTPUT == 1 ]; then echo "Filename,Commit message" > ..\\"$TIMESTAMP.csv"; fi
+if [ $CSV_FILE_OUTPUT == 1 ]; then echo "Filename,Commit message,Author,State" > ..\\"$TIMESTAMP.csv"; fi
 
 for filename in $files; do
-  message=$(git log -1 --pretty=format:"%s%n" -- "$filename")
+  message=$(git log -1 --pretty=format:"%s, %an," --name-status -- "$filename" | awk '{if(NR==1) print $0; else if(NR==2) print $1;}' | tr '\n' ' ')
   echo "File: $filename"
   echo "Commit message: $message"
-  echo "$filename,$message" >> ..\\"$TIMESTAMP.csv"
+  if [ $CSV_FILE_OUTPUT == 1 ]; then echo "$filename,$message" >> ..\\"$TIMESTAMP.csv"; fi
 done
 
 cd ..
