@@ -6,8 +6,8 @@ Changes in collab branches can be difficult for PR reviewers to process, given t
 
 This process preserves all of the original commit history that has occurred in the collab branch, by:
 
-1. Using the script to generate the list of collab branch files that have been added, updated, or deleted, including details of the latest commit for each file. The list is essentially a diff between the collab branch and one of it's BASE ancestors (ie: release-* or main). The commit message is used to filter out files that don't require review, as indicated by a standard prefix such as `REVIEWED: <message>` or similar.
-2. Identifying a subset of files from the generated list for review, as determined by the lack of the commit message prefix. 
+1. Using the script to generate the list of collab branch files that have been added, updated, or deleted, including details of the latest commit for each file. The list is essentially a diff between the collab branch and a BASE ancestor (ie: release-* or main). The commit message is used to filter out files that don't require review, as indicated by a standard prefix such as `REVIEWED: <message>` or similar.
+2. Identifying a subset of files from the list for review, as determined by the lack of the commit message prefix. 
 3. Marking the subset of files for review by applying a small commit, allowing the files to be included in a review PR against the collab branch.
 4. Reviewing the PR files and applying a final `REVIEWED: <message>` commit to them, then merging them back into the collab branch.
 
