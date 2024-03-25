@@ -38,7 +38,7 @@ On the machine where the script is run, complete the following steps:
 
 1. Open a Git Bash console and CD into the parent directory of your repo where the script lives, ie: `c:\git`.  
 
-2. The script uses the `gh api` command, which requires GitHub authentication. You can either run `gh auth login` and follow the prompts to authenticate with your GitHub account, or create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and assign it to the GITHUB_TOKEN environment variable. It's not recommended to keep the GITHUB_TOKEN variable assignment in the script for security reasons.
+2. The script uses the `gh api` command, which requires a one-time GitHub authentication by running `gh auth login` from Git Bash and following the prompts to authenticate with your GitHub account.
 
 2. Run the script using: `./get-collab-branch-status.sh`. The script will:  
    1. Set several variables and prompt for verification of their values.
@@ -53,9 +53,9 @@ On the machine where the script is run, complete the following steps:
 4. Mark the files to be reviewed:  
    1. CD into your local clone subdirectory and check out the collab branch.  
    2. Mark the files identified in step #3 by applying a small change to them:  
-      **New/modified text files (.MD, .YML, .JSON)**: these just need to have a small update, such as a space added to the end of a line. For Markdown and YML files that support metadata, a better way is to add the `ms.lastreviewed: MM/DD/YYYY` metadata. This can also be used to track multiple review cycles for the given file and collab branch. 
+      **Added/Modified text files (.MD, .YML, .JSON)**: these just need to have a small update, such as a space added to the end of a line. For Markdown and YML files that support metadata, a better way is to add the `ms.lastreviewed: MM/DD/YYYY` metadata. This can also be used to track multiple review cycles for the given file and collab branch. 
       
-      **New/modified image files**: these are difficult to "mark" and should really be reviewed in the context of the host articles. As such, the PR reviewer can provide feedback in the review PR (created in the next step), indicating whether changes need to be made.   
+      **Added/Modified image files**: these are difficult to "mark" and should really be reviewed in the context of the host articles. As such, the PR reviewer can provide feedback to the contributor in the review PR (created in the next step), indicating whether changes need to be made.   
 
 5.  Push the collab branch to your fork and open a PR against the main repo's collab branch. As PR reviewers review/update the files in the PR and collaborate with contributors, they'll need to touch all of the PR's files, and apply a consistent commit message prefix, for example, "REVIEWED: <description of updates>" or similar. This is also the text you'll be looking for in step #3 above, when looking for files that need to be reviewed.  
 
@@ -65,7 +65,7 @@ On the machine where the script is run, complete the following steps:
 
 If you see the following output, you are running the script from the wrong directory. This script must be run from the local repo's parent directory:   
    ```   
-   Getting a fresh local copy of collab branch: collab-cafmigrate-wave2 ...
+   Getting a fresh local copy of collab branch: collab-govern ...
    ../get-collab-branch-status.sh: line 42: cd: cloud-adoption-framework-pr: No such file or directory
    ```  
 
