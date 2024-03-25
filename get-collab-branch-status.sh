@@ -19,7 +19,7 @@ DEBUG=0                             # 0=no, 1=yes
 # Usage
 if [ -z "$ORG" ] || [ -z "$REPO" ] || [ -z "$COLLAB_BRANCH" ] || [ -z "$PR" ]; then
     echo "One or more command line arguments is empty"
-    echo "Usage: get-collab-files-status <GitHub Org> <GitHub Repo> <Collab branch> <Pull request>"
+    echo "Usage: get-collab-files-status"
     echo "Gets the list of files from a collab branch and their review status"
     exit
 fi
@@ -31,6 +31,7 @@ echo "Repository: $REPO"
 echo "Collab branch: $COLLAB_BRANCH_REMOTE / $COLLAB_BRANCH"
 echo "Pull request: $PR"
 echo "This script must be run from the parent directory of the $REPO subdirectory."
+echo "You must authenticate with GitHub the first time you run it. Run 'gh auth login' and follow the prompts."
 echo "Press ENTER if you're ready, otherwise CTRL-C to cancel ..."
 read -p ""
 
@@ -57,7 +58,8 @@ fi
 # Get list of files in the pull request
 echo
 echo "Getting a list of files in PR: $PR ..."
-files=$(gh api repos/$org/$repo/pulls/$PR/files --jq '.[].filename' --paginate)
+if [ $DEBUG == 1 ]; then echo "API call: gh api repos/$ORG/$REPO/pulls/$PR/files"; fi
+files=$(gh api repos/$ORG/$REPO/pulls/$PR/files --jq '.[].filename' --paginate)
 if [ -z "$files" ]; then
     echo "Invalid PR or no files found in the pull request."
     exit 1

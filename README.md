@@ -2,9 +2,9 @@
 
 This repo contains a Git Bash script and process for managing pull request (PR) reviews of contributions against a collaboration (aka: collab) branch.
 
-Changes in collab branches can be difficult for PR reviewers to process, given that contributors can sign-off and merge work without getting final PR review. This is especially true as collab branch commits accumulate over time, impacting 10s or 100s of files. Although this is more common in collab branches, this script/process can be used to chunk up reviews of large contributions in any branch (whenever a practical limit has been exceeded), before it's merged back into a BASE branch. This process preserves all of the original commit history that has occurred in the collab branch.
+Changes in collab branches can be difficult for PR reviewers to process, given that contributors can sign-off and merge work without getting final PR review. This is especially true as collab branch commits accumulate over time, impacting 10s or 100s of files. Although this is more common in collab branches, this script/process can be used to chunk up reviews of large contributions in any branch (whenever a practical limit has been exceeded), before it's merged back into a BASE branch. 
 
-The general process includes:  
+This process preserves all of the original commit history that has occurred in the collab branch, by:
 
 1. Using the script to generate the list of collab branch files that have been added, updated, or deleted, including details of the latest commit for each file. The list is essentially a diff between the collab branch and one of it's BASE ancestors (ie: release-* or main). The commit message is used to filter out files that don't require review, as indicated by a standard prefix such as `REVIEWED: <message>` or similar.
 2. Identifying a subset of files from the generated list for review, as determined by the lack of the commit message prefix. 
@@ -38,7 +38,7 @@ On the machine where the script is run, complete the following steps:
 
 1. Open a Git Bash console and CD into the parent directory of your repo where the script lives, ie: `c:\git`.  
 
-2. The script uses the `gh api` command, which requires GitHub authentication. You can either run `gh auth login` and follow the prompts to authenticate with your GitHub account. Or create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and assign it to the GITHUB_TOKEN environment variable. It's not recommended to keep the GITHUB_TOKEN variable assignment in the script for security reason.
+2. The script uses the `gh api` command, which requires GitHub authentication. You can either run `gh auth login` and follow the prompts to authenticate with your GitHub account, or create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and assign it to the GITHUB_TOKEN environment variable. It's not recommended to keep the GITHUB_TOKEN variable assignment in the script for security reasons.
 
 2. Run the script using: `./get-collab-branch-status.sh`. The script will:  
    1. Set several variables and prompt for verification of their values.
@@ -58,3 +58,23 @@ On the machine where the script is run, complete the following steps:
       **New/modified image files**: these are difficult to "mark" and should really be reviewed in the context of the host articles. As such, the PR reviewer can provide feedback in the review PR (created in the next step), indicating whether changes need to be made.   
 
 5.  Push the collab branch to your fork and open a PR against the main repo's collab branch. As PR reviewers review/update the files in the PR and collaborate with contributors, they'll need to touch all of the PR's files, and apply a consistent commit message prefix, for example, "REVIEWED: <description of updates>" or similar. This is also the text you'll be looking for in step #3 above, when looking for files that need to be reviewed.  
+
+## Troubleshooting
+
+#### cd: cloud-adoption-framework-pr: No such file or directory
+
+If you see the following output, you are running the script from the wrong directory. This script must be run from the local repo's parent directory:   
+   ```   
+   Getting a fresh local copy of collab branch: collab-cafmigrate-wave2 ...
+   ../get-collab-branch-status.sh: line 42: cd: cloud-adoption-framework-pr: No such file or directory
+   ```  
+
+#### gh: Not Found (HTTP 404) ####
+
+If you see the following output, you have not authenticated with GitHub correctly. See step #2 of the Usage section above for instructions:
+   ```   
+   Getting a list of files in PR: <PR#> ...
+   gh: Not Found (HTTP 404)
+   ```   
+
+
