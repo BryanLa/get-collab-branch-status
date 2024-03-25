@@ -1,13 +1,15 @@
 # get-collab-branch-status
 
-This repo contains a Git Bash script and process for listing the review status of all files in a collaboration (aka: collab) branch, allowing a subset of the files to be isolated in a pull request (PR) for review. This process can be used by PR reviewers to chunk files for review, allowing the review process to occur on a more granular level rather than all modified files. This is especially useful in collab branches where contributors can merge PRs without final review by the PR review team. In reality, it could be used to chunk up unreviewed work in any branch though.
+This repo contains a Git Bash script and process for managing pull request (PR) reviews of contributions against a collaboration (aka: collab) branch.
 
-The script runs locally and:
+Changes in collab branches can be difficult for PR reviewers to process, given that contributors can sign-off and merge work without getting final PR review. This is especially true as collab branch commits accumulate over time, impacting 10s or 100s of files. Although this is more common in collab branches, this script/process can be used to chunk up reviews of large contributions in any branch (whenever a practical limit has been exceeded), before it's merged back into a BASE branch. This process preserves all of the original commit history that has occurred in the collab branch.
 
-1. Sets several variables and prompt for verification of their values.
-2. Checks out a fresh copy of the collab branch. If it doesn't exist locally yet it will create a copy of it.
-3. Gets a list of the files that have been modified in the collab branch.
-4. Walks the list of files and pull the latest commit message for each file. The filename and commit message are output to the console by default, and can also be directed to a .csv file for analysis.
+The general process includes:  
+
+1. Using the script to generate the list of collab branch files that have been added, updated, or deleted, including details of the latest commit for each file. The list is essentially a diff between the collab branch and one of it's BASE ancestors (ie: release-* or main). The commit message is used to filter out files that don't require review, as indicated by a standard prefix such as `REVIEWED: <message>` or similar.
+2. Identifying a subset of files from the generated list for review, as determined by the lack of the commit message prefix. 
+3. Marking the subset of files for review by applying a small commit, allowing the files to be included in a review PR against the collab branch.
+4. Reviewing the PR files and applying a final `REVIEWED: <message>` commit to them, then merging them back into the collab branch.
 
 ## Prerequisites and setup
 
@@ -38,7 +40,11 @@ On the machine where the script is run, complete the following steps:
 
 2. The script uses the `gh api` command, which requires GitHub authentication. You can either run `gh auth login` and follow the prompts to authenticate with your GitHub account. Or create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and assign it to the GITHUB_TOKEN environment variable. It's not recommended to keep the GITHUB_TOKEN variable assignment in the script for security reason.
 
-2. Run the script using: `./get-collab-branch-status.sh`. The script will output the PR filenames and commit info to the console, and optionally to the .csv file.  
+2. Run the script using: `./get-collab-branch-status.sh`. The script will:  
+   1. Set several variables and prompt for verification of their values.
+   2. Check out a fresh copy of the collab branch. If it doesn't exist locally yet it will create a copy of it.
+   3. Get a list of the files that have been modified in the collab branch.
+   4. Walk the list of files and pull the latest commit message for each file. The filename and commit message are output to the console by default, and can also be directed to a .csv file for analysis.
 
 3. Using the script output, identify the files to be reviewed:  
    1. Files with a "REVIEWED" commit message can be ignored, as these have not been updated since their last review.  
@@ -51,4 +57,4 @@ On the machine where the script is run, complete the following steps:
       
       **New/modified image files**: these are difficult to "mark" and should really be reviewed in the context of the host articles. As such, the PR reviewer can provide feedback in the review PR (created in the next step), indicating whether changes need to be made.   
 
-5. Push the collab branch to your fork and open a PR against the main repo's collab branch. As PR reviewers review/update the files in the PR and collaborate with contributors, they'll need to touch all of the PR's files, and apply a consistent commit message prefix, for example, "REVIEWED: <description of updates>" or similar. This is also the text you'll be looking for in step #3 above, when looking for files that need to be reviewed.  
+5.  Push the collab branch to your fork and open a PR against the main repo's collab branch. As PR reviewers review/update the files in the PR and collaborate with contributors, they'll need to touch all of the PR's files, and apply a consistent commit message prefix, for example, "REVIEWED: <description of updates>" or similar. This is also the text you'll be looking for in step #3 above, when looking for files that need to be reviewed.  
